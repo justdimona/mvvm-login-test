@@ -28,6 +28,7 @@ protocol UserServiceProtocol {
     // MARK: - Public methods
     func login()
     func logout()
+    func baseURL(for username: String) -> Observable<String>
     // ...
 }
 
@@ -67,6 +68,19 @@ final class UserService: UserServiceProtocol {
     func logout() {
         // Do API and other logic of course
         UserDefaults.standard.setLoggedIn(value: false)
+    }
+    
+    func baseURL(for username: String) -> Observable<String> {
+        do {
+            let request = try apiService.request(username: username)
+            return URLSession.shared.rx
+                .json(request: request)
+                .compactMap { $0 as? [String: Any] }
+                .compactMap { $0["platform"] as? [String: Any] }
+                .compactMap { $0["baseURL"] as? String }
+        } catch {
+            return Single.error(error).asObservable()
+        }
     }
     
     deinit {

@@ -41,9 +41,9 @@ enum TabBarItems: Int, CaseIterable {
         }
     }
     
-    static func allCases() -> [TabBarItems] {
-        return TabBarItems.allCases
-    }
+//    static func allCases() -> [TabBarItems] {
+//        return TabBarItems.allCases
+//    }
 }
 
 final class MainTabBarController: UITabBarController {
@@ -83,7 +83,7 @@ extension MainTabBarController {
         tabBar.tintColor = .lightGray
         tabBar.unselectedItemTintColor = .black
         
-        viewControllers = TabBarItems.allCases().map({ item -> UINavigationController in
+        viewControllers = TabBarItems.allCases.map({ item -> UINavigationController in
             let newNC = UINavigationController()
             newNC.tabBarItem = UITabBarItem(title: nil,
                                             image: item.image,
